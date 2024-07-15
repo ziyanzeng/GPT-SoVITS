@@ -1,0 +1,29 @@
+version: 1.0.0
+name: genImage
+title: genImage api
+description: 文生图
+httpServer:
+  addr: 0.0.0.0:12201
+baidu:
+  client_id: f24JmIMQRdEUinEYI1lQR7IL
+  client_secret: V658olKUrwB5qo1IfGA8ILb5SzMzJA4y
+volcengine:
+  ak: AKLTOGI0MzQzN2MyYmJhNDRjMmI2NzRiYTllNzI1ZjJjN2M
+  sk: T1RZeVlUTTVaR014WVdGaU5HSTBZemt4TXpJNE1XTXpaVGRoTVRJMVlUUQ==
+minio:
+  bucket: aiengine
+  proxy: http://10.10.18.178:30001
+  endpoint: 10.10.18.178:30001
+  accessKey: ydvCo8Sb5WlV79h4tWNW
+  secretKey: 0GjnZMh9LbzVyMsEJsVjBstlRcazzdUqPNEYvaod
+env:
+  OSS_ENDPOINT: "minio.endpoint"
+  OSS_ACCESS_KEY: "minio.accessKey"
+  OSS_SECRET_KEY: "minio.secretKey"
+  OSS_URL: "minio.proxy"
+  OSS_BUCKET: "minio.bucket"
+  DATA_PATH: "dataPath"
+  BAIDU_CLIENTID: "baidu.client_id"
+  BAIDU_SECRET: "baidu.client_secret"
+  VOLCENGINE_AK: "volcengine.ak"
+  VOLCENGINE_SK: "volcengine.sk"

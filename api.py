@@ -120,6 +120,7 @@ RESP: 无
 import argparse
 import os,re
 import sys
+from uuid import uuid4
 
 now_dir = os.getcwd()
 sys.path.append(now_dir)
@@ -147,6 +148,8 @@ from tools.my_utils import load_audio
 import config as global_config
 import logging
 import subprocess
+
+from python_packages import objectStorage
 
 
 class DefaultRefer:
@@ -574,7 +577,33 @@ def handle(refer_wav_path, prompt_text, prompt_language, text, text_language, cu
 
     return StreamingResponse(get_tts_wav(refer_wav_path, prompt_text, prompt_language, text, text_language), media_type="audio/"+media_type)
 
+def handle2(refer_wav_path, prompt_text, prompt_language, text, text_language, cut_punc):
+    if (
+            refer_wav_path == "" or refer_wav_path is None
+            or prompt_text == "" or prompt_text is None
+            or prompt_language == "" or prompt_language is None
+    ):
+        refer_wav_path, prompt_text, prompt_language = (
+            default_refer.path,
+            default_refer.text,
+            default_refer.language,
+        )
+        if not default_refer.is_ready():
+            return JSONResponse({"code": 400, "message": "未指定参考音频且接口无预设"}, status_code=400)
 
+    if cut_punc == None:
+        text = cut_text(text,default_cut_punc)
+    else:
+        text = cut_text(text,cut_punc)
+
+    audio_bytes = BytesIO()
+    for chunk in get_tts_wav(refer_wav_path, prompt_text, prompt_language, text, text_language):
+        audio_bytes.write(chunk)
+        
+    file_id = str(uuid4())
+    file_url = objectStorage.upload_single_file(f"GPTSoVITS/audiofiles/{file_id}.wav", audio_bytes.getvalue(), block=True)
+
+    return file_url
 
 
 # --------------------------------
@@ -767,7 +796,9 @@ async def tts_endpoint(
         text_language: str = None,
         cut_punc: str = None,
 ):
-    return handle(refer_wav_path, prompt_text, prompt_language, text, text_language, cut_punc)
+    # return handle(refer_wav_path, prompt_text, prompt_language, text, text_language, cut_punc)
+
+    return StreamingResponse(handle2(refer_wav_path, prompt_text, prompt_language, text, text_language, cut_punc))
 
 
 if __name__ == "__main__":

@@ -26,3 +26,12 @@ jieba
 LangSegment>=0.2.0
 Faster_Whisper
 wordsegment
+
+minio
+loguru
+fastapi
+uvicorn
+PyYAML
+python-multipart
+httpx
+mariadb==1.1.10

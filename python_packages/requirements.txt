@@ -1,0 +1,8 @@
+minio
+loguru
+fastapi
+uvicorn
+PyYAML
+python-multipart
+httpx
+mariadb==1.1.10
